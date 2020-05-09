@@ -58,6 +58,27 @@ class Course {
         const courses = await Course.getAll();
         return courses.find(course => course.id === id);
     }
+
+    static async update(course) {
+        const courses = await Course.getAll();
+        const courseId = courses.findIndex(courseItem => courseItem.id === course.id);
+
+        courses[courseId] = course;
+
+        return new Promise((resolve, reject) => {
+            fs.writeFile(
+                path.join(__dirname, '..', 'data', 'courses.json'),
+                JSON.stringify(courses),
+                (err) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                }
+            )
+        })
+    }
 }
 
 module.exports = Course;
